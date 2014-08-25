@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property name="CONSOLE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } [%t] --- %-40.40logger{39} : %m%n%wex"/>
+
+	<conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${CONSOLE_LOG_PATTERN}</pattern>
+		</encoder>
+	</appender>
+	<appender name="daily" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${catalina.base}/logs/catalina.out</file>
+		<append>true</append>
+		<encoder>
+			<charset>utf-8</charset>
+			<pattern>%date |-%-5level in %-40.40logger{0}-%-4L|%msg%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${catalina.base}/logs/catalina-%d{yyyy.MM.dd}-%i.log.zip</fileNamePattern>
+			<maxHistory>10<!-- days --></maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+	
+	<logger name="org.springframework.exam" level="DEBUG" />
+	<!--logger name="org.springframework.integration" level="DEBUG"/-->
+	
+	<root level="INFO">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="daily" />
+	</root>
+	
+	
+</configuration>
